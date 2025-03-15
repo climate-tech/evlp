@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Landing Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* RESET & BASIC STYLES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+                   Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      color: #000;
+      background-color: #fff;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* CONTAINER STYLES */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-top-text {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-top-text h1 {
+      font-size: 3rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .hero-top-text p {
+      font-size: 1rem;
+      max-width: 300px;
+      margin-top: 0.5rem;
+      color: #666;
+    }
+
+    .hero-welcome {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #333;
+      max-width: 600px;
+    }
+
+    /* PROJECT SECTION */
+    .project {
+      padding: 4rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .project img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: 1rem;
+      opacity: 0; /* For fade-in effect */
+      transform: translateY(20px); /* For fade-in effect */
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .project h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .project p {
+      max-width: 600px;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .visit-website {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      background-color: #000;
+      color: #fff;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      border-radius: 3px;
+      transition: background-color 0.3s ease;
+    }
+
+    .visit-website:hover {
+      background-color: #333;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    /* FADE-IN CLASS (added when in view) */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .fade-in.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero-top-text h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero-top-text {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .hero-welcome {
+        font-size: 1rem;
+      }
+
+      .project h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO SECTION -->
+  <section class="hero container">
+    <div class="hero-top-text fade-in">
+      <!-- Left side -->
+      <div>
+        <h1>Easley Ventures<br>asdf</h1>
+        
+      </div>
+      <!-- Right side -->
+      <div>
+        <p>asdf:</p>
+      </div>
+    </div>
+    <p class="hero-welcome fade-in">
+      asdf
+    </p>
+  </section>
+
+  <!-- PROJECT SECTION -->
+  <section class="project container">
+    <img src="your-image-1.jpg" alt="Project Image 1" class="fade-in" />
+    <h2 class="fade-in">asdf</h2>
+    <p class="fade-in">
+      asdf
+    </p>
+    <a href="#" class="visit-website fade-in">asdf</a>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    contact
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // Fade-in on scroll using Intersection Observer
+    document.addEventListener('DOMContentLoaded', () => {
+      const faders = document.querySelectorAll('.fade-in');
+
+      const options = {
+        threshold: 0.1
+      };
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, options);
+
+      faders.forEach(fader => {
+        observer.observe(fader);
+      });
+    });
+  </script>
+
+</body>
+</html>
