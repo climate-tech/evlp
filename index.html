@@ -4,8 +4,57 @@
   <meta charset="UTF-8" />
   <title>Landing Page</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-    /* RESET & BASIC STYLES */
+    /* ----------------------------------
+       1) @font-face Declarations
+    ---------------------------------- */
+    @font-face {
+      font-family: 'BDOGrotesk';
+      src: url('https://raw.githubusercontent.com/LCTipografi/BDO-Grotesk/main/Fonts/Webfont/BDOGrotesk-ExtraLight.woff2') format('woff2');
+      font-weight: 200;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'BDOGrotesk';
+      src: url('https://raw.githubusercontent.com/LCTipografi/BDO-Grotesk/main/Fonts/Webfont/BDOGrotesk-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'BDOGrotesk';
+      src: url('https://raw.githubusercontent.com/LCTipografi/BDO-Grotesk/main/Fonts/Webfont/BDOGrotesk-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'BDOGrotesk';
+      src: url('https://raw.githubusercontent.com/LCTipografi/BDO-Grotesk/main/Fonts/Webfont/BDOGrotesk-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'BDOGrotesk';
+      src: url('https://raw.githubusercontent.com/LCTipografi/BDO-Grotesk/main/Fonts/Webfont/BDOGrotesk-ExtraBold.woff2') format('woff2');
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'BDOGrotesk';
+      src: url('https://raw.githubusercontent.com/LCTipografi/BDO-Grotesk/main/Fonts/Webfont/BDOGrotesk-Black.woff2') format('woff2');
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ----------------------------------
+       2) Reset & Basic Styles
+    ---------------------------------- */
     * {
       margin: 0;
       padding: 0;
@@ -13,7 +62,8 @@
     }
 
     body {
-      font-family: Bdogrotesk Vf, sans-serif;
+      font-family: 'BDOGrotesk', sans-serif;
+      font-weight: 400; /* Default to regular weight for body text */
       color: #000;
       background-color: #fff;
       overflow-x: hidden;
@@ -25,7 +75,9 @@
       color: inherit;
     }
 
-    /* CONTAINER STYLES */
+    /* ----------------------------------
+       3) Container
+    ---------------------------------- */
     .container {
       width: 90%;
       max-width: 1200px;
@@ -33,7 +85,9 @@
       padding: 2rem 0;
     }
 
-    /* HERO SECTION */
+    /* ----------------------------------
+       4) Hero Section
+    ---------------------------------- */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -51,12 +105,13 @@
 
     .hero-top-text h1 {
       font-size: 3rem;
-      font-weight: 600;
+      font-weight: 700; /* Bold for hero title */
       line-height: 1.2;
     }
 
     .hero-top-text p {
       font-size: 1rem;
+      font-weight: 400;
       max-width: 300px;
       margin-top: 0.5rem;
       color: #666;
@@ -65,11 +120,14 @@
     .hero-welcome {
       margin-top: 1rem;
       font-size: 1.2rem;
+      font-weight: 400;
       color: #333;
       max-width: 600px;
     }
 
-    /* PROJECT SECTION */
+    /* ----------------------------------
+       5) Project Section
+    ---------------------------------- */
     .project {
       padding: 4rem 0;
       display: flex;
@@ -89,6 +147,7 @@
 
     .project h2 {
       font-size: 1.8rem;
+      font-weight: 700; /* Bold subheading */
       margin-bottom: 1rem;
     }
 
@@ -96,6 +155,7 @@
       max-width: 600px;
       margin-bottom: 1rem;
       line-height: 1.6;
+      font-weight: 400;
       color: #555;
     }
 
@@ -105,6 +165,7 @@
       background-color: #000;
       color: #fff;
       font-size: 0.9rem;
+      font-weight: 500; /* Medium for buttons */
       letter-spacing: 0.5px;
       border-radius: 3px;
       transition: background-color 0.3s ease;
@@ -114,7 +175,9 @@
       background-color: #333;
     }
 
-    /* FOOTER */
+    /* ----------------------------------
+       6) Footer
+    ---------------------------------- */
     footer {
       text-align: left;
       padding: 2rem 0;
@@ -122,7 +185,9 @@
       color: #666;
     }
 
-    /* FADE-IN CLASS (added when in view) */
+    /* ----------------------------------
+       7) Fade-in Class
+    ---------------------------------- */
     .fade-in {
       opacity: 0;
       transform: translateY(20px);
@@ -133,7 +198,9 @@
       transform: translateY(0);
     }
 
-    /* RESPONSIVE */
+    /* ----------------------------------
+       8) Responsive
+    ---------------------------------- */
     @media (max-width: 768px) {
       .hero-top-text h1 {
         font-size: 2.2rem;
@@ -162,9 +229,8 @@
       <!-- Left side -->
       <div>
         <img src="easley-ventures-logo.jpg" alt="Easley Ventures logo" class="fade-in" />
-    <h2 class="fade-in"></h2>
+        <h2 class="fade-in" style="font-weight: 500;">(Optional Subtitle)</h2>
         <h1>Easley Ventures</h1>
-        
       </div>
       <!-- Right side -->
       <div>
@@ -173,17 +239,21 @@
     <p class="hero-welcome fade-in">
       short description
     </p>
-        <img src="your-image-1.jpg" alt="Project Image 1" class="fade-in" />
-    <h2 class="fade-in"></h2>
+    <img src="your-image-1.jpg" alt="Project Image 1" class="fade-in" />
+    <h2 class="fade-in" style="font-weight: 700;">(Another Heading)</h2>
 
-    contact: hi@easleyventures.com     646-696-1942     linkedin
+    <p class="fade-in" style="margin: 1rem 0; font-weight: 400;">
+      contact: hi@easleyventures.com &nbsp; 646-696-1942 &nbsp; linkedin
+    </p>
   </section>
 
-  <!-- PROJECT SECTION -->
+  <!-- PROJECT SECTION (Optional) -->
+  <!-- Add more sections or images as needed -->
 
-
-  <!-- FOOTER -->
-
+  <!-- FOOTER (Optional) -->
+  <!-- <footer>
+    © 2025 Easley Ventures
+  </footer> -->
 
   <!-- JAVASCRIPT -->
   <script>
