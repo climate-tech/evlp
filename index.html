@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" sizes="32x32" href="easley-ventures-logo.png">
   <style>
-    /* ----------------------------------
-       1) @font-face Declarations
-    ---------------------------------- */
+
     @font-face {
       font-family: 'BDOGrotesk';
       src: url('https://raw.githubusercontent.com/LCTipografi/BDO-Grotesk/main/Fonts/Webfont/BDOGrotesk-ExtraLight.woff2') format('woff2');
@@ -52,9 +50,7 @@
       font-display: swap;
     }
 
-    /* ----------------------------------
-       2) Reset & Basic Styles
-    ---------------------------------- */
+ 
     * {
       margin: 0;
       padding: 0;
@@ -75,10 +71,7 @@
       color: inherit;
     }
 
-    /* ----------------------------------
-       3) Container
-       (Removed top/bottom padding so logo is at the top)
-    ---------------------------------- */
+
     .container {
       width: 90%;
       max-width: 1200px;
@@ -86,35 +79,42 @@
       padding: 0; /* was 2rem 0 */
     }
 
-    /* ----------------------------------
-       4) Hero Section
-       (No vertical centering, so logo sits at top)
-    ---------------------------------- */
+    .logo-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000; /* Ensures the logo stays on top of other content */
+    }
+    
+    .logo {
+      max-width: 80px; /* Adjust as needed */
+      height: auto;
+    }
+
     .hero {
       display: block; 
-      /* min-height: 100vh; -- removed */
-      /* display: flex; flex-direction: column; justify-content: center; -- removed */
+
     }
 
     .hero-top-text {
       display: flex;
-      flex-direction: column; /* stack logo and heading vertically */
+      flex-direction: column;
       align-items: flex-start;
       margin-top: 20px;
-      margin-bottom: 1rem;    /* was 2rem, now less space */
+      margin-bottom: 1rem;   
     }
 
     .hero-top-text img {
       max-width: 80px;
       height: auto;
-      margin-bottom: 0.5rem;  /* small gap before heading */
+      margin-bottom: 0.5rem;  
     }
 
-    /* Lighter heading, less space after */
+  
     .hero-top-text h1 {
-      font-size: 2rem;  /* or 3rem if you prefer */
+      font-size: 2rem;  
       font-weight: 400;
-      margin: 0 0 0.5rem 0; /* small margin below heading */
+      margin: 0 0 0.5rem 0; 
       line-height: 1.2;
       margin-top: 3rem;
     }
@@ -128,9 +128,7 @@
       max-width: 600px;
     }
 
-    /* ----------------------------------
-       5) Project Section (unchanged)
-    ---------------------------------- */
+
     .project {
       padding: 4rem 0;
       display: flex;
@@ -143,7 +141,7 @@
       height: auto;
       display: block;
       margin-bottom: 1rem;
-      opacity: 0; /* For fade-in effect */
+      opacity: 0; 
       transform: translateY(20px);
       transition: opacity 1s ease, transform 1s ease;
     }
@@ -178,9 +176,7 @@
       background-color: #333;
     }
 
-    /* ----------------------------------
-       6) Footer (optional)
-    ---------------------------------- */
+
     footer {
       text-align: left;
       padding: 2rem 0;
@@ -188,9 +184,7 @@
       color: #666;
     }
 
-    /* ----------------------------------
-       7) Fade-in Class
-    ---------------------------------- */
+
     .fade-in {
       opacity: 0;
       transform: translateY(20px);
@@ -201,19 +195,14 @@
       transform: translateY(0);
     }
 
-    /* ----------------------------------
-       8) Additional styling for the GIF
-    ---------------------------------- */
+
     .hero-gif {
       margin: 2rem 0; /* space above/below the GIF */
       max-width: 100%;
       height: auto;
     }
 
-    /* ----------------------------------
-       9) Bottom links: left email, right LinkedIn
-       with animated underline
-    ---------------------------------- */
+
     .bottom-links {
   display: grid;
   grid-template-columns: 1fr auto 1fr; 
@@ -256,12 +245,10 @@
 }
 
 
-    /* ----------------------------------
-       10) Responsive
-    ---------------------------------- */
+
     @media (max-width: 768px) {
       .hero-top-text h1 {
-        font-size: 2rem; /* slightly smaller on mobile */
+        font-size: 2rem; 
       }
 
       .hero-top-text {
@@ -280,10 +267,14 @@
 </head>
 <body>
 
-  <!-- HERO SECTION -->
+  <a href="https://easleyventures.com" class="logo-link">
+    <img src="easley-ventures-logo.png" alt="Easley Ventures logo" class="logo">
+  </a>
+
+
   <section class="hero container">
     <div class="hero-top-text fade-in">
-      <img src="easley-ventures-logo.png" alt="Easley Ventures logo" class="fade-in" />
+
       <h1>Easley Ventures</h1>
     </div>
 
@@ -301,17 +292,16 @@
 
   </section>
 
-  <!-- PROJECT SECTION (Optional) -->
-  <!-- Add more sections or images as needed -->
+ 
 
-  <!-- FOOTER (Optional) -->
+  <!-- FOOTER -->
   <!-- <footer>
     © 2025 Easley Ventures
   </footer> -->
 
   <!-- JAVASCRIPT -->
   <script>
-    // Fade-in on scroll using Intersection Observer
+  
     document.addEventListener('DOMContentLoaded', () => {
       const faders = document.querySelectorAll('.fade-in');
 
