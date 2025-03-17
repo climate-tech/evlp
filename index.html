@@ -79,18 +79,18 @@
       width: 90%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0; /* was 2rem 0 */
+      padding: 0; 
     }
 
     .logo-link {
       position: fixed;
       top: 20px;
       left: 20px;
-      z-index: 1000; /* Ensures the logo stays on top of other content */
+      z-index: 1000; 
     }
     
     .logo {
-      max-width: 80px; /* Adjust as needed */
+      max-width: 60px; 
       height: auto;
     }
 
@@ -122,7 +122,6 @@
       margin-top: 3rem;
     }
 
-    /* Less margin above tagline */
     .hero-welcome {
       margin-top: 0;
       font-size: 1.2rem;
@@ -200,31 +199,44 @@
 
 
     .hero-gif {
-      margin: 2rem 0; /* space above/below the GIF */
+      margin: 2rem 0; 
       max-width: 100%;
       height: auto;
     }
 
 
-    .bottom-links {
+   .bottom-links {
   display: grid;
   grid-template-columns: 1fr auto 1fr; 
   align-items: center;
   margin: 2rem 0;
-}
-
-
-.left-text {
-  justify-self: start;
-}
-
-.center-text {
-  justify-self: center;
-}
-
-.right-text {
-  justify-self: end;
-}
+  }
+  
+  .left-text {
+    justify-self: start;
+  }
+  
+  .center-text {
+    justify-self: center;
+  }
+  
+  .right-text {
+    justify-self: end;
+  }
+  
+  @media (max-width: 600px) {
+    .bottom-links {
+      grid-template-columns: 1fr; 
+      row-gap: 1rem;            
+      text-align: center;        
+    }
+  
+    .left-text,
+    .center-text,
+    .right-text {
+      justify-self: center; 
+    }
+  }
 
 .link-underline {
   position: relative;
@@ -300,10 +312,11 @@
         <a href="mailto:hi@easleyventures.com" class="left-text link-underline">
           hi@easleyventures.com
         </a>
-        <span class="center-text">Brooklyn, NY</span>
-        <a href="https://www.linkedin.com/company/easley-ventures/" class="right-text link-underline">
+        
+        <a href="https://www.linkedin.com/company/easley-ventures/" class="center-text link-underline">
           LinkedIn
         </a>
+        <span class="right-text">Brooklyn, NY</span>
     </div>
 
   </section>
