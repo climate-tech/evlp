@@ -228,24 +228,33 @@
 
 .link-underline {
   position: relative;
-  color: #000;
   text-decoration: none;
+  color: #000;
 }
 
 .link-underline::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -2px;
-  width: 0;
+  bottom: -2px; 
+  width: 100%; 
   height: 1px;
   background-color: currentColor;
-  transition: width 0.3s ease;
 }
 
 .link-underline:hover::after {
-  width: 100%;
+  animation: redraw 0.5s ease forwards;
 }
+
+@keyframes redraw {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 
 
 
@@ -282,15 +291,19 @@
     </div>
 
     <p class="hero-welcome fade-in">
-      Investing in climate tech innovation for corporate sustainability.
+      Investing in climate tech innovation for triple top line outcomes: People, Profit and Planet. [more soon--follow on <a href="https://www.linkedin.com/company/easley-ventures/" class="link-underline"> linkedin</a> for updates]
     </p>
 
     <img src="ev-li-image-noise.gif" alt="image" class="fade-in hero-gif" />
 
     <div class="bottom-links fade-in">
-  <span class="left-text link-underline">hi@easleyventures.com</span>
-  <span class="center-text">Brooklyn, NY</span>
-  <span class="right-text link-underline">linkedin</span>
+        <a href="mailto:hi@easleyventures.com" class="left-text link-underline">
+          hi@easleyventures.com
+        </a>
+        <span class="center-text">Brooklyn, NY</span>
+        <a href="https://www.linkedin.com/company/easley-ventures/" class="right-text link-underline">
+          linkedin
+        </a>
     </div>
 
   </section>
