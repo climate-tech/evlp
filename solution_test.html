@@ -3,776 +3,434 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desalination Technology Investment Analysis</title>
+    <title>Urban Adaptation & Resilience Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Custom scrollbar for modal (optional, for better aesthetics) */
+        #modal-content::-webkit-scrollbar {
+            width: 8px;
         }
-
+        #modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        #modal-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        #modal-content::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Basic body font */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #ffffff;
-            color: #000000;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
         }
+        /* Ensure Inter font is loaded */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-        .container {
-            display: flex;
-            height: 100vh;
+        /* Improved focus states for accessibility and shadcn-like feel */
+        select:focus, input[type="text"]:focus, button:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px #2563eb; /* Tailwind's blue-600 */
         }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            height: 100vh;
-            overflow-y: auto;
-            position: fixed;
-            left: 0;
-            top: 0;
-            background-color: #F3F4F6;
-            border-right: 1px solid #CCCCCC;
-            padding: 2rem 1rem;
+        .filter-element {
+            min-width: 150px; 
         }
-
-        .sidebar h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #000000;
+        /* Styling for the expand/collapse icon */
+        .subsector-header .icon::before {
+            display: inline-block;
+            margin-right: 0.5rem;
+            font-weight: bold;
+            transition: transform 0.2s ease-in-out;
         }
-
-        .nav-item {
-            display: block;
-            padding: 0.5rem 1rem;
-            margin: 0.25rem 0;
-            text-decoration: none;
-            color: #666666;
-            border-radius: 0.375rem;
-            transition: all 0.2s;
-            font-size: 0.875rem;
+        .subsector-header .icon.expanded::before {
+            content: '−'; /* Minus sign */
+            transform: rotate(0deg);
         }
-
-        .nav-item:hover {
-            background-color: #DBEAFE;
-            color: #3B82F6;
-        }
-
-        .nav-item.active {
-            background-color: #3B82F6;
-            color: #ffffff;
-        }
-
-        /* Main content */
-        .main-content {
-            margin-left: 280px;
-            padding: 3rem;
-            width: calc(100% - 280px);
-            max-width: 1000px;
-            overflow-y: auto;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            color: #000000;
-            border-bottom: 2px solid #3B82F6;
-            padding-bottom: 1rem;
-        }
-
-        h2 {
-            font-size: 1.875rem;
-            font-weight: 600;
-            margin-top: 3rem;
-            margin-bottom: 1.5rem;
-            color: #000000;
-            scroll-margin-top: 2rem;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            color: #000000;
-        }
-
-        h4 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: #000000;
-        }
-
-        p {
-            margin-bottom: 1rem;
-            color: #000000;
-        }
-
-        ul, ol {
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        ul ul, ol ol {
-            margin-top: 0.5rem;
-            margin-bottom: 0;
-        }
-
-        strong {
-            font-weight: 600;
-        }
-
-        em {
-            font-style: italic;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            background-color: #ffffff;
-            border: 1px solid #CCCCCC;
-            border-radius: 0.375rem;
-            overflow: hidden;
-        }
-
-        th, td {
-            border: 1px solid #CCCCCC;
-            padding: 0.75rem;
-            text-align: left;
-        }
-
-        th {
-            background-color: #F3F4F6;
-            font-weight: 600;
-            color: #000000;
-        }
-
-        tr:nth-child(even) {
-            background-color: #F3F4F6;
-        }
-
-        .section {
-            scroll-margin-top: 2rem;
-        }
-
-        .highlight {
-            background-color: #DBEAFE;
-            border-left: 4px solid #3B82F6;
-            padding: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        /* Horizontal nav bar for mobile */
-        .mobile-nav {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                display: block;
-                padding-top: 60px;
-            }
-
-            .hamburger {
-                display: none;
-            }
-
-            .overlay {
-                display: none;
-            }
-
-            .sidebar {
-                display: none;
-            }
-
-            .mobile-nav {
-                display: block;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 60px;
-                background-color: #F3F4F6;
-                border-bottom: 1px solid #CCCCCC;
-                z-index: 100;
-                overflow-x: auto;
-                overflow-y: hidden;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .mobile-nav-inner {
-                display: flex;
-                align-items: center;
-                height: 100%;
-                min-width: max-content;
-                padding: 0 1rem;
-            }
-
-            .mobile-nav-item {
-                display: inline-block;
-                padding: 0.5rem 1rem;
-                margin: 0 0.5rem;
-                text-decoration: none;
-                color: #666666;
-                border-radius: 0.375rem;
-                transition: all 0.2s;
-                font-size: 0.875rem;
-                white-space: nowrap;
-                flex-shrink: 0;
-            }
-
-            .mobile-nav-item:hover {
-                background-color: #DBEAFE;
-                color: #3B82F6;
-            }
-
-            .mobile-nav-item.active {
-                background-color: #3B82F6;
-                color: #ffffff;
-            }
-
-            .main-content {
-                margin-left: 0;
-                width: 100%;
-                padding: 1rem;
-            }
+        .subsector-header .icon.collapsed::before {
+            content: '+'; /* Plus sign */
+            transform: rotate(0deg);
         }
     </style>
 </head>
-<body>
-    <div class="mobile-nav">
-        <div class="mobile-nav-inner">
-            <a href="#executive-summary" class="mobile-nav-item">Executive Summary</a>
-            <a href="#technology-overview" class="mobile-nav-item">Technology</a>
-            <a href="#climate-adaptation" class="mobile-nav-item">Climate Adaptation</a>
-            <a href="#energy-environmental" class="mobile-nav-item">Energy & Environmental</a>
-            <a href="#market-analysis" class="mobile-nav-item">Market Analysis</a>
-            <a href="#innovation-landscape" class="mobile-nav-item">Innovation</a>
-            <a href="#technological-challenges" class="mobile-nav-item">Challenges</a>
-            <a href="#geographic-suitability" class="mobile-nav-item">Geographic</a>
-            <a href="#competitive-landscape" class="mobile-nav-item">Competitive</a>
-            <a href="#financial-considerations" class="mobile-nav-item">Financial</a>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="mb-6 text-center">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-700">Urban Adaptation & Resilience Solutions</h1>
+            <p class="text-gray-600 mt-2">Browse and filter A&R activities based on various criteria.</p>
+        </header>
+
+        <div class="mb-4 flex justify-end">
+            <button id="toggle-all-button" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-3 rounded-lg shadow-md text-sm transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                Expand All
+            </button>
         </div>
+
+        <div id="filters" class="mb-8 p-4 sm:p-6 bg-white rounded-xl shadow-lg">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label for="subsector-filter" class="block text-sm font-medium text-gray-700 mb-1">Subsector (Filter)</label>
+                    <select id="subsector-filter" class="filter-element w-full p-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                        <option value="">All Subsectors</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="hazard-filter" class="block text-sm font-medium text-gray-700 mb-1">Climate Hazard</label>
+                    <select id="hazard-filter" class="filter-element w-full p-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                        <option value="">All Hazards</option>
+                    </select>
+                </div>
+                <div class="sm:col-span-2 lg:col-span-1">
+                    <label for="text-filter" class="block text-sm font-medium text-gray-700 mb-1">Search Text</label>
+                    <input type="text" id="text-filter" placeholder="Search any field..." class="filter-element w-full p-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                </div>
+                <div>
+                    <button id="reset-filters-button" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading-indicator" class="text-center py-10">
+            <p class="text-xl text-gray-600">Loading data...</p>
+        </div>
+        
+        <div id="no-results-indicator" class="text-center py-10 hidden">
+            <p class="text-xl text-gray-600">No solutions match the current filters.</p>
+        </div>
+
+        <div id="subsector-groups-container" class="space-y-6">
+            </div>
     </div>
-    
-    <div class="container">
-        <nav class="sidebar">
-            <h2>Table of Contents</h2>
-            <a href="#executive-summary" class="nav-item">1. Executive Summary & Investment Thesis</a>
-            <a href="#technology-overview" class="nav-item">2. Technology Overview</a>
-            <a href="#climate-adaptation" class="nav-item">3. Climate Adaptation & Resilience</a>
-            <a href="#energy-environmental" class="nav-item">4. Energy Sources & Environmental</a>
-            <a href="#market-analysis" class="nav-item">5. Market Analysis & Growth Drivers</a>
-            <a href="#innovation-landscape" class="nav-item">6. Innovation Landscape</a>
-            <a href="#technological-challenges" class="nav-item">7. Key Technological Challenges</a>
-            <a href="#geographic-suitability" class="nav-item">8. Geographic & Project Suitability</a>
-            <a href="#competitive-landscape" class="nav-item">9. Competitive Landscape</a>
-            <a href="#financial-considerations" class="nav-item">10. Financial & Investment</a>
-        </nav>
 
-        <main class="main-content">
-            <h1>Desalination Technology: An Investment Analysis for Climate Adaptation & Resilience</h1>
-
-            <section id="executive-summary" class="section">
-                <h2>1. Executive Summary & Investment Thesis Highlights</h2>
-                
-                <h3>Synthesis of Findings</h3>
-                <p>The global desalination market presents a compelling investment opportunity within the climate adaptation and resilience (A&R) theme. Driven by escalating water scarcity due to climate change, population growth, and industrial demand, the need for climate-independent water sources is becoming critical worldwide. Technological advancements, particularly in Reverse Osmosis (RO), have significantly improved energy efficiency and reduced costs, making desalination increasingly competitive against conventional water sources and alternatives like large-scale water transfers.</p>
-
-                <div class="highlight">
-                    <h4>Key Investment Drivers</h4>
-                    <ul>
-                        <li>Climate change exacerbating global water scarcity</li>
-                        <li>Technological progress reducing energy consumption by 50% in recent decades</li>
-                        <li>Growing regulatory pressure for sustainable solutions</li>
-                        <li>Transition from niche solution to core water management strategy</li>
-                    </ul>
+    <div id="details-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4 z-50 transition-opacity duration-300 ease-in-out">
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl max-w-xl md:max-w-2xl lg:max-w-3xl w-full max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="modal-title" class="text-2xl font-semibold text-gray-800">Solution Details</h2>
+                <button id="modal-close-button" class="text-gray-500 hover:text-gray-800 transition-colors text-2xl font-bold">&times;</button>
+            </div>
+            <div id="modal-content" class="overflow-y-auto pr-2">
                 </div>
-
-                <h3>Core Investment Thesis</h3>
-                <p>The fundamental driver for investment in desalination stems from its role as critical infrastructure for climate adaptation. Climate change is demonstrably increasing the frequency and severity of droughts, reducing conventional freshwater availability, and causing saltwater intrusion in coastal areas, thereby intensifying global water stress.</p>
-
-                <h3>Key Opportunities</h3>
-                <ul>
-                    <li><strong>Platform Investments:</strong> Acquiring or investing in established technology providers with proven track records (e.g., Veolia, Suez, IDE Technologies)</li>
-                    <li><strong>Growth Equity in Innovators:</strong> Supporting startups developing disruptive technologies</li>
-                    <li><strong>Project Finance & Development:</strong> Partnering to finance new projects in high-growth regions</li>
-                    <li><strong>Renewable Energy Integration:</strong> Investing in sustainable desalination solutions</li>
-                </ul>
-
-                <h3>Critical Risks</h3>
-                <ul>
-                    <li><strong>Financial & Execution Risk:</strong> High capital intensity and potential for cost overruns</li>
-                    <li><strong>Market & Offtake Risk:</strong> Dependence on long-term water purchase agreements</li>
-                    <li><strong>Regulatory Risk:</strong> Complex permitting processes and changing regulations</li>
-                    <li><strong>Environmental & Social Risk:</strong> Marine impacts and community acceptance challenges</li>
-                </ul>
-            </section>
-
-            <section id="technology-overview" class="section">
-                <h2>2. Technology Overview</h2>
-                
-                <h3>Explanation of Desalination</h3>
-                <p>Desalination refers to any process that removes salts and other dissolved minerals from saline water sources to produce freshwater suitable for human consumption, irrigation, or industrial use. The fundamental principle involves separating the incoming feedwater into two streams: a product stream with low salt concentration and a reject stream with high salt concentration.</p>
-
-                <h3>Core Technologies</h3>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Technology</th>
-                            <th>Principle</th>
-                            <th>Efficiency</th>
-                            <th>Applications</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Reverse Osmosis (RO)</strong></td>
-                            <td>Pressure-driven membrane separation</td>
-                            <td>SEC: 2-5 kWh/m³</td>
-                            <td>Municipal & industrial desal</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Multi-Stage Flash (MSF)</strong></td>
-                            <td>Thermal distillation via flashing</td>
-                            <td>SEC: 10-27 kWh/m³</td>
-                            <td>Large scale seawater</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Multi-Effect Distillation (MED)</strong></td>
-                            <td>Evaporation in stages</td>
-                            <td>SEC: 5.5-9 kWh/m³</td>
-                            <td>Medium-large scale</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Electrodialysis (ED/EDR)</strong></td>
-                            <td>Electrically driven ion transport</td>
-                            <td>Variable by salt content</td>
-                            <td>Brackish water</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Membrane Distillation (MD)</strong></td>
-                            <td>Thermal vapor transport</td>
-                            <td>GOR dependent</td>
-                            <td>High salinity, niche</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <section id="climate-adaptation" class="section">
-                <h2>3. Climate Adaptation & Resilience (A&R) Relevance</h2>
-                
-                <h3>Climate Hazards Addressed</h3>
-                <ul>
-                    <li><strong>Increased Drought Frequency:</strong> Desalination provides a rainfall-independent water source</li>
-                    <li><strong>Reduced Freshwater Availability:</strong> Taps into non-climate-dependent seawater resources</li>
-                    <li><strong>Saltwater Intrusion:</strong> Mitigates contamination of coastal aquifers</li>
-                    <li><strong>Degraded Water Quality:</strong> Provides robust treatment against quality variations</li>
-                </ul>
-
-                <h3>Enhancing Community Adaptation</h3>
-                <p>By providing a reliable water source independent of climate variability, desalination enhances water security, economic stability, and public health while reducing conflict potential over scarce water resources.</p>
-            </section>
-
-            <section id="energy-environmental" class="section">
-                <h2>4. Energy Sources & Environmental Considerations</h2>
-                
-                <h3>Energy Intensity</h3>
-                <p>Energy consumption represents 25-60% of operating costs for desalination plants. The sector consumes approximately 75 TWh annually, resulting in 76 Mt CO₂/year when powered by fossil fuels.</p>
-
-                <h3>Renewable Energy Integration</h3>
-                <div class="highlight">
-                    <h4>Key Integration Strategies</h4>
-                    <ul>
-                        <li>Solar PV + RO: Most common pairing due to falling costs</li>
-                        <li>Wind + RO: Economically attractive in windy locations</li>
-                        <li>Solar Thermal + MED/MD: High-temperature heat applications</li>
-                        <li>Hybrid Systems: Multiple renewable sources for increased reliability</li>
-                    </ul>
-                </div>
-
-                <h3>Environmental Challenges</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Challenge</th>
-                            <th>Impact</th>
-                            <th>Mitigation Strategies</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Brine Discharge</strong></td>
-                            <td>Elevated salinity in marine environments</td>
-                            <td>Diffusers, co-discharge, ZLD systems, brine valorization</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Intake Impacts</strong></td>
-                            <td>Marine life impingement and entrainment</td>
-                            <td>Subsurface intakes, velocity caps, screening systems</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Chemical Use</strong></td>
-                            <td>Antiscalants and cleaning agents in discharge</td>
-                            <td>Chemical optimization, eco-friendly alternatives</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <section id="market-analysis" class="section">
-                <h2>5. Market Analysis & Growth Drivers</h2>
-                
-                <h3>Market Size & Growth</h3>
-                <p>The global desalination market is valued at USD 15-26 billion annually as of 2023-2024, with projections to reach USD 33-50 billion by the early 2030s. The market demonstrates strong growth at 7-10% CAGR.</p>
-
-                <h3>Key Drivers</h3>
-                <ul>
-                    <li>Climate change and increasing water scarcity</li>
-                    <li>Population growth and urbanization</li>
-                    <li>Industrial and agricultural demand</li>
-                    <li>Technological advancements reducing costs</li>
-                    <li>Government policies supporting water security</li>
-                    <li>Depletion of conventional water sources</li>
-                </ul>
-
-                <h3>Geographic Markets</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Region</th>
-                            <th>Market Share</th>
-                            <th>Primary Drivers</th>
-                            <th>Key Trends</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>MENA</strong></td>
-                            <td>~50%</td>
-                            <td>Extreme aridity, gov. investment</td>
-                            <td>Shift from thermal to RO</td>
-                        </tr>
-                        <tr>
-                            <td><strong>APAC</strong></td>
-                            <td>Fastest growing</td>
-                            <td>Population, urbanization</td>
-                            <td>Industrial reuse, PPPs</td>
-                        </tr>
-                        <tr>
-                            <td><strong>North America</strong></td>
-                            <td>Significant</td>
-                            <td>Drought (Western US)</td>
-                            <td>Environmental regulations</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Europe</strong></td>
-                            <td>Growing</td>
-                            <td>Mediterranean stress</td>
-                            <td>Efficiency focus</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <section id="innovation-landscape" class="section">
-                <h2>6. Innovation Landscape & Technological Advancement</h2>
-                
-                <h3>Innovation Pathways</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Innovation Area</th>
-                            <th>Key Developments</th>
-                            <th>Potential Benefits</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Next-Gen Membranes</strong></td>
-                            <td>Nanocomposites, aquaporin, graphene</td>
-                            <td>Higher flux, improved fouling resistance</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Energy Efficiency</strong></td>
-                            <td>Advanced ERDs, batch RO, low-temp thermal</td>
-                            <td>Reduced energy consumption</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Brine Valorization</strong></td>
-                            <td>Mineral extraction, ZLD systems</td>
-                            <td>Revenue generation, waste reduction</td>
-                        </tr>
-                        <tr>
-                            <td><strong>AI/ML Optimization</strong></td>
-                            <td>Predictive maintenance, real-time control</td>
-                            <td>Reduced OpEx, improved reliability</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h3>Technology Readiness Levels</h3>
-                <p>The industry spans the full innovation spectrum, from mature commercial technologies (RO, MSF) to emerging solutions in development (graphene membranes, adsorption desalination).</p>
-            </section>
-
-            <section id="technological-challenges" class="section">
-                <h2>7. Key Technological Challenges & Opportunities</h2>
-                
-                <h3>Critical Technical Hurdles</h3>
-                <ol>
-                    <li><strong>Energy Consumption:</strong> Approaching theoretical minimum (1 kWh/m³)</li>
-                    <li><strong>Cost Reduction:</strong> Lowering CapEx and OpEx through innovation</li>
-                    <li><strong>Brine Management:</strong> Sustainable, cost-effective disposal solutions</li>
-                    <li><strong>Membrane Durability:</strong> Extending lifespan, improving fouling resistance</li>
-                    <li><strong>Environmental Impacts:</strong> Minimizing intake/outfall effects</li>
-                    <li><strong>Infrastructure Integration:</strong> Scaling emerging technologies</li>
-                    <li><strong>Operational Complexity:</strong> Enhancing automation and reliability</li>
-                </ol>
-
-                <h3>Investment Opportunities</h3>
-                <ul>
-                    <li>Energy efficiency breakthroughs in membranes and ERDs</li>
-                    <li>Cost reduction solutions including modular designs</li>
-                    <li>Brine management innovations and valorization</li>
-                    <li>Advanced membrane technologies with better fouling resistance</li>
-                    <li>Environmental mitigation technologies for intake systems</li>
-                    <li>AI/ML solutions for process optimization</li>
-                    <li>Niche application technologies for specialized markets</li>
-                </ul>
-            </section>
-
-            <section id="geographic-suitability" class="section">
-                <h2>8. Geographic & Project Suitability Criteria</h2>
-                
-                <h3>Favorable Conditions</h3>
-                <div class="highlight">
-                    <h4>Essential Criteria</h4>
-                    <ul>
-                        <li>High water stress or scarcity</li>
-                        <li>Coastal access (for seawater) or brackish resources</li>
-                        <li>Reliable and affordable energy infrastructure</li>
-                        <li>Supportive regulatory frameworks</li>
-                        <li>Political stability and strong governance</li>
-                        <li>Economic capacity and access to finance</li>
-                        <li>Suitable site conditions and land availability</li>
-                        <li>Social acceptance and stakeholder support</li>
-                    </ul>
-                </div>
-
-                <h3>Examples of Suitable vs Less Suitable Regions</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Examples</th>
-                            <th>Key Factors</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Highly Suitable</strong></td>
-                            <td>GCC countries, Israel, Coastal Australia, Singapore</td>
-                            <td>Extreme aridity, economic capacity, political stability</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Moderately Suitable</strong></td>
-                            <td>California, Mediterranean Europe, Chile</td>
-                            <td>Growing scarcity, regulatory challenges</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Less Suitable</strong></td>
-                            <td>Landlocked regions, water-abundant areas</td>
-                            <td>Brine disposal issues, lack of economic drivers</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <section id="competitive-landscape" class="section">
-                <h2>9. Competitive Landscape</h2>
-                
-                <h3>Established Players</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Company</th>
-                            <th>Capabilities</th>
-                            <th>Geographic Focus</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Veolia</strong></td>
-                            <td>Full value chain, digital solutions</td>
-                            <td>Global leader, 18% world capacity</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Suez</strong></td>
-                            <td>RO/thermal tech, O&M</td>
-                            <td>Worldwide operations</td>
-                        </tr>
-                        <tr>
-                            <td><strong>IDE Technologies</strong></td>
-                            <td>Pure-play desal specialist</td>
-                            <td>Israel, global projects</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Acciona Agua</strong></td>
-                            <td>EPC, O&M, RO focus</td>
-                            <td>MENA, Spain, Australia</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Doosan Enerbility</strong></td>
-                            <td>Thermal/RO, EPC</td>
-                            <td>Middle East strong</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h3>Startup Ecosystem</h3>
-                <ul>
-                    <li><strong>Advanced Membranes:</strong> NanoH2O (acquired), Aquaporin, NematiQ</li>
-                    <li><strong>Novel Processes:</strong> Desalitech (acquired), Voltea, Gradiant</li>
-                    <li><strong>Brine Management:</strong> EnergyX, Lilac Solutions, Adionics</li>
-                    <li><strong>AI/Digital:</strong> TaKaDu, Fracta, Ketos</li>
-                    <li><strong>Renewable Integration:</strong> Resolute Marine Energy</li>
-                </ul>
-
-                <h3>Competitive Dynamics</h3>
-                <p>The market is highly competitive, especially for large-scale municipal projects. Key competitive advantages include technology innovation, cost leadership, execution capability, O&M expertise, and sustainability profile.</p>
-            </section>
-
-            <section id="financial-considerations" class="section">
-                <h2>10. Financial & Investment Considerations</h2>
-                
-                <h3>Capital Intensity (CapEx)</h3>
-                <p>Desalination projects require substantial upfront investment, typically ranging from USD 800-1,500 per m³/day of capacity for large-scale SWRO plants.</p>
-
-                <h4>Example Project Costs</h4>
-                <ul>
-                    <li>100,000 m³/day plant: USD 80-150 million</li>
-                    <li>Sorek plant (411,000 m³/day): ~USD 400 million</li>
-                    <li>Carlsbad plant (189,000 m³/day): USD 734 million</li>
-                    <li>Perth plant (140,000 m³/day): AUD 387 million</li>
-                </ul>
-
-                <h3>Operating Expenses (OpEx)</h3>
-                <div class="highlight">
-                    <h4>OpEx Breakdown</h4>
-                    <ul>
-                        <li><strong>Energy:</strong> 25-60% of total costs</li>
-                        <li><strong>Membrane replacement:</strong> Every 5-10 years</li>
-                        <li><strong>Chemicals:</strong> Antiscalants, cleaning agents</li>
-                        <li><strong>Labor & maintenance:</strong> Skilled workforce required</li>
-                    </ul>
-                </div>
-
-                <h3>Financial Models</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Model</th>
-                            <th>Description</th>
-                            <th>Characteristics</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>PPP/BOT</strong></td>
-                            <td>Public-Private Partnership</td>
-                            <td>Long-term revenue guarantees, risk sharing</td>
-                        </tr>
-                        <tr>
-                            <td><strong>BOO</strong></td>
-                            <td>Build-Own-Operate</td>
-                            <td>Private ownership, WPA contracts</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Utility Investment</strong></td>
-                            <td>Public/private utility owned</td>
-                            <td>Integrated water management</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h3>Investment Return Considerations</h3>
-                <ul>
-                    <li>Long-term, stable cash flows (20-30 year contracts)</li>
-                    <li>Energy cost sensitivity and hedging strategies</li>
-                    <li>Regulatory and political stability crucial</li>
-                    <li>Environmental compliance and social license</li>
-                    <li>Technology obsolescence risk for long-lived assets</li>
-                </ul>
-            </section>
-        </main>
+        </div>
     </div>
 
     <script>
-        // Smooth scroll functionality for both desktop and mobile
-        function setupNavigation() {
-            const navItems = document.querySelectorAll('.nav-item, .mobile-nav-item');
-            
-            navItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    
-                    // Remove active class from all nav items
-                    navItems.forEach(navItem => {
-                        navItem.classList.remove('active');
-                    });
-                    
-                    // Add active class to clicked item
-                    this.classList.add('active');
-                    
-                    // Smooth scroll to target
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
+        // Global variables
+        let GLOBAL_DATA = [];
+        let HEADERS = [];
+        const CSV_FILE_PATH = './Adaptation_Taxonomy.csv'; // Ensure this path is correct
+
+        const CLIMATE_HAZARDS_COLUMNS = [
+            "Heat Stress", "Cold Stress", "Water Stress", "Storm Conditions",
+            "Flooding", "Mass Movement", "Wildfire Conditions", "Marine Conditions"
+        ];
+
+        // DOM Elements
+        const subsectorFilter = document.getElementById('subsector-filter');
+        const hazardFilter = document.getElementById('hazard-filter');
+        const textFilter = document.getElementById('text-filter');
+        const subsectorGroupsContainer = document.getElementById('subsector-groups-container'); // Changed from cardsContainer
+        const detailsModal = document.getElementById('details-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalCloseButton = document.getElementById('modal-close-button');
+        const modalTitle = document.getElementById('modal-title');
+        const resetFiltersButton = document.getElementById('reset-filters-button');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const noResultsIndicator = document.getElementById('no-results-indicator');
+        const toggleAllButton = document.getElementById('toggle-all-button');
+
+        // --- DATA LOADING AND INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAndProcessData();
+            setupEventListeners();
+        });
+
+        async function loadAndProcessData() {
+            loadingIndicator.classList.remove('hidden');
+            subsectorGroupsContainer.innerHTML = ''; 
+            noResultsIndicator.classList.add('hidden');
+
+            try {
+                const response = await fetch(CSV_FILE_PATH);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status} while fetching ${CSV_FILE_PATH}`);
+                }
+                const csvText = await response.text();
+
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        if (results.errors.length > 0) {
+                            console.error("CSV Parsing Errors:", results.errors);
+                            loadingIndicator.textContent = "Error parsing CSV. Check console.";
+                            return;
+                        }
+                        GLOBAL_DATA = results.data;
+                        HEADERS = results.meta.fields;
+                        
+                        populateFilters();
+                        applyFilters(); // Initial render with all data (grouped)
+                        loadingIndicator.classList.add('hidden');
+                    },
+                    error: function(error) {
+                        console.error("PapaParse Error:", error);
+                        loadingIndicator.textContent = "Failed to parse CSV data.";
+                    }
                 });
+            } catch (fetchError) {
+                console.error("Error fetching CSV:", fetchError);
+                loadingIndicator.textContent = `Failed to load data: ${fetchError.message}. Ensure '${CSV_FILE_PATH}' is accessible.`;
+            }
+        }
+
+        // --- FILTER POPULATION ---
+        function populateFilters() {
+            const subsectors = [...new Set(GLOBAL_DATA.map(item => item.Subsectors).filter(Boolean))].sort();
+            subsectorFilter.innerHTML = '<option value="">All Subsectors</option>';
+            subsectors.forEach(subsector => {
+                const option = document.createElement('option');
+                option.value = subsector;
+                option.textContent = subsector;
+                subsectorFilter.appendChild(option);
+            });
+
+            hazardFilter.innerHTML = '<option value="">All Hazards</option>';
+            CLIMATE_HAZARDS_COLUMNS.forEach(hazard => {
+                if (HEADERS.includes(hazard)) {
+                    const option = document.createElement('option');
+                    option.value = hazard;
+                    option.textContent = hazard;
+                    hazardFilter.appendChild(option);
+                }
             });
         }
 
-        // Add active class to current section based on scroll position
-        function updateActiveSection() {
-            const sections = document.querySelectorAll('.section');
-            const navItems = document.querySelectorAll('.nav-item, .mobile-nav-item');
-            
-            let current = '';
-            const offset = window.innerWidth <= 768 ? 80 : 100; // Account for fixed mobile nav
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
+        // --- DATA GROUPING ---
+        function groupDataBySubsector(data) {
+            const grouped = {};
+            data.forEach(item => {
+                const subsector = item.Subsectors || "Uncategorized"; // Group items with no subsector
+                if (!grouped[subsector]) {
+                    grouped[subsector] = [];
+                }
+                grouped[subsector].push(item);
+            });
+            // Sort subsectors alphabetically for consistent order in display
+            const sortedGrouped = {};
+            Object.keys(grouped).sort().forEach(key => {
+                sortedGrouped[key] = grouped[key];
+            });
+            return sortedGrouped;
+        }
+
+        // --- RENDERING COLLAPSIBLE GROUPS AND CARDS ---
+        function renderGroupedData(groupedData) {
+            subsectorGroupsContainer.innerHTML = '';
+            noResultsIndicator.classList.add('hidden');
+
+            if (Object.keys(groupedData).length === 0) {
+                noResultsIndicator.classList.remove('hidden');
+                updateToggleAllButtonText(); // Update button state
+                return;
+            }
+
+            for (const subsectorName in groupedData) {
+                const itemsInSubsector = groupedData[subsectorName];
+                if (itemsInSubsector.length === 0) continue; // Skip if subsector is empty
+
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'subsector-group bg-white rounded-xl shadow-md overflow-hidden';
+
+                const headerButton = document.createElement('button');
+                headerButton.className = 'subsector-header flex justify-between items-center w-full p-4 text-left focus:outline-none hover:bg-gray-50 transition-colors';
+                headerButton.setAttribute('aria-expanded', 'false'); // Default collapsed
+                headerButton.innerHTML = `
+                    <h2 class="text-xl font-semibold text-gray-700">${subsectorName} (${itemsInSubsector.length})</h2>
+                    <span class="icon collapsed text-xl text-blue-600"></span>
+                `;
+
+                const cardsContainerDiv = document.createElement('div');
+                cardsContainerDiv.className = 'subsector-cards-container p-4 border-t border-gray-200 hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
                 
-                if (window.pageYOffset >= sectionTop - offset) {
-                    current = section.getAttribute('id');
+                itemsInSubsector.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-gray-50 rounded-lg shadow-lg p-5 hover:shadow-xl transition-shadow duration-300 ease-in-out cursor-pointer flex flex-col justify-between';
+                    const activityText = item.Activity && item.Activity.length > 100 ? item.Activity.substring(0, 97) + '...' : item.Activity;
+                    // Subsector is already in the group title, so we might not need it in the card, or keep it for context.
+                    // For now, let's keep it simple and focus on Activity.
+                    card.innerHTML = `
+                        <div>
+                            <h3 class="text-md font-semibold text-blue-600 mb-2">${activityText || 'N/A'}</h3>
+                            </div>
+                        <button class="mt-3 text-xs text-blue-500 hover:text-blue-700 font-medium self-start">View Details &rarr;</button>
+                    `;
+                    card.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent group from toggling if card is clicked
+                        showModal(item);
+                    });
+                    cardsContainerDiv.appendChild(card);
+                });
+
+                headerButton.addEventListener('click', () => {
+                    const isExpanded = headerButton.getAttribute('aria-expanded') === 'true';
+                    headerButton.setAttribute('aria-expanded', !isExpanded);
+                    cardsContainerDiv.classList.toggle('hidden');
+                    headerButton.querySelector('.icon').classList.toggle('expanded', !isExpanded);
+                    headerButton.querySelector('.icon').classList.toggle('collapsed', isExpanded);
+                    updateToggleAllButtonText();
+                });
+
+                groupDiv.appendChild(headerButton);
+                groupDiv.appendChild(cardsContainerDiv);
+                subsectorGroupsContainer.appendChild(groupDiv);
+            }
+            updateToggleAllButtonText();
+        }
+        
+        // --- MODAL HANDLING ---
+        function showModal(itemData) {
+            modalTitle.textContent = itemData.Activity || 'Solution Details';
+            modalContent.innerHTML = ''; 
+            const dl = document.createElement('dl');
+            dl.className = 'divide-y divide-gray-200';
+            HEADERS.forEach(header => {
+                const value = itemData[header] !== undefined && itemData[header] !== null ? String(itemData[header]).trim() : '';
+                if (value) {
+                    const dt = document.createElement('dt');
+                    dt.className = 'text-sm font-semibold text-gray-700 py-3';
+                    dt.textContent = header;
+                    const dd = document.createElement('dd');
+                    dd.className = 'text-sm text-gray-600 pb-3 pl-2';
+                    dd.textContent = value; 
+                    dl.appendChild(dt);
+                    dl.appendChild(dd);
                 }
             });
-            
-            navItems.forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('href') === '#' + current) {
-                    item.classList.add('active');
-                }
-            });
+            modalContent.appendChild(dl);
+            detailsModal.classList.remove('hidden');
+            detailsModal.classList.add('flex');
+            trapFocus(detailsModal);
         }
 
-        // Initialize navigation
-        setupNavigation();
-        window.addEventListener('scroll', updateActiveSection);
+        function hideModal() {
+            detailsModal.classList.add('hidden');
+            detailsModal.classList.remove('flex');
+            if (lastFocusedElement) lastFocusedElement.focus();
+        }
         
-        // Update on resize
-        window.addEventListener('resize', updateActiveSection);
+        let lastFocusedElement;
+        function trapFocus(element) {
+            const focusableEls = element.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])');
+            const firstFocusableEl = focusableEls.length > 0 ? focusableEls[0] : null;
+            const lastFocusableEl = focusableEls.length > 0 ? focusableEls[focusableEls.length - 1] : null;
+            lastFocusedElement = document.activeElement;
+            element.addEventListener('keydown', function(e) {
+                const isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+                if (!isTabPressed || !firstFocusableEl) return;
+                if (e.shiftKey) { 
+                    if (document.activeElement === firstFocusableEl) {
+                        if (lastFocusableEl) lastFocusableEl.focus(); 
+                        e.preventDefault();
+                    }
+                } else { 
+                    if (document.activeElement === lastFocusableEl) {
+                        if (firstFocusableEl) firstFocusableEl.focus(); 
+                        e.preventDefault();
+                    }
+                }
+            });
+            if(firstFocusableEl) firstFocusableEl.focus();
+        }
+
+        // --- FILTERING LOGIC ---
+        function applyFilters() {
+            const selectedSubsectorVal = subsectorFilter.value;
+            const selectedHazard = hazardFilter.value;
+            const searchText = textFilter.value.toLowerCase().trim();
+
+            let filteredData = GLOBAL_DATA;
+
+            if (selectedSubsectorVal) {
+                filteredData = filteredData.filter(item => item.Subsectors === selectedSubsectorVal);
+            }
+            if (selectedHazard) {
+                filteredData = filteredData.filter(item => item[selectedHazard] && item[selectedHazard].toUpperCase() === 'X');
+            }
+            if (searchText) {
+                filteredData = filteredData.filter(item => 
+                    Object.values(item).some(value => String(value).toLowerCase().includes(searchText))
+                );
+            }
+            
+            const groupedFilteredData = groupDataBySubsector(filteredData);
+            renderGroupedData(groupedFilteredData);
+        }
+
+        // --- TOGGLE ALL FUNCTIONALITY ---
+        function updateToggleAllButtonText() {
+            const allGroups = subsectorGroupsContainer.querySelectorAll('.subsector-group .subsector-header');
+            if (allGroups.length === 0) {
+                 toggleAllButton.textContent = 'Expand All'; // Default if no groups
+                 toggleAllButton.disabled = true;
+                 return;
+            }
+            toggleAllButton.disabled = false;
+            // Check if all are expanded
+            const allExpanded = Array.from(allGroups).every(header => header.getAttribute('aria-expanded') === 'true');
+            if (allExpanded) {
+                toggleAllButton.textContent = 'Collapse All';
+            } else {
+                toggleAllButton.textContent = 'Expand All';
+            }
+        }
+
+        function toggleAllSections() {
+            const allHeaders = subsectorGroupsContainer.querySelectorAll('.subsector-group .subsector-header');
+            // Determine if we are expanding or collapsing based on the button's current text
+            const expandAction = toggleAllButton.textContent === 'Expand All';
+
+            allHeaders.forEach(headerButton => {
+                const cardsDiv = headerButton.nextElementSibling; // The .subsector-cards-container
+                const icon = headerButton.querySelector('.icon');
+                
+                headerButton.setAttribute('aria-expanded', expandAction);
+                cardsDiv.classList.toggle('hidden', !expandAction);
+                icon.classList.toggle('expanded', expandAction);
+                icon.classList.toggle('collapsed', !expandAction);
+            });
+            updateToggleAllButtonText(); // Update button text after action
+        }
+        
+        // --- EVENT LISTENERS ---
+        function setupEventListeners() {
+            subsectorFilter.addEventListener('change', applyFilters);
+            hazardFilter.addEventListener('change', applyFilters);
+            textFilter.addEventListener('input', applyFilters);
+            
+            modalCloseButton.addEventListener('click', hideModal);
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && !detailsModal.classList.contains('hidden')) hideModal();
+            });
+            detailsModal.addEventListener('click', (event) => {
+                if (event.target === detailsModal) hideModal();
+            });
+
+            resetFiltersButton.addEventListener('click', () => {
+                subsectorFilter.value = '';
+                hazardFilter.value = '';
+                textFilter.value = '';
+                applyFilters();
+                // Optionally, collapse all sections on reset
+                // if (toggleAllButton.textContent === 'Collapse All') toggleAllSections(); 
+            });
+
+            toggleAllButton.addEventListener('click', toggleAllSections);
+        }
     </script>
 </body>
 </html>
