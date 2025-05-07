@@ -136,10 +136,9 @@
 
     <div id="details-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4 z-50 transition-opacity duration-300 ease-in-out">
         <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl max-w-xl md:max-w-2xl lg:max-w-3xl w-full max-h-[90vh] flex flex-col">
-            <div id="modal-header" class="flex justify-between items-center mb-4"> {/* Added ID for easier targeting */}
+            <div id="modal-header" class="flex justify-between items-center mb-4">
                 <h2 id="modal-title" class="text-2xl font-semibold text-gray-800">Solution Details</h2>
-                {/* Detailed Report Button will be inserted here by JS if applicable */}
-                <button id="modal-close-button" class="text-gray-500 hover:text-gray-800 transition-colors text-2xl font-bold ml-4">&times;</button> {/* Added ml-4 for spacing */}
+                <button id="modal-close-button" class="text-gray-500 hover:text-gray-800 transition-colors text-2xl font-bold ml-4">&times;</button>
             </div>
             <div id="modal-content" class="overflow-y-auto pr-2">
                 </div>
@@ -168,7 +167,7 @@
         const textFilter = document.getElementById('text-filter');
         const subsectorGroupsContainer = document.getElementById('subsector-groups-container');
         const detailsModal = document.getElementById('details-modal');
-        const modalHeader = document.getElementById('modal-header'); // Get modal header
+        const modalHeader = document.getElementById('modal-header'); 
         const modalContent = document.getElementById('modal-content');
         const modalCloseButton = document.getElementById('modal-close-button');
         const modalTitle = document.getElementById('modal-title');
@@ -323,12 +322,12 @@
             updateToggleAllButtonText();
         }
         
-        // --- MODAL HANDLING (UPDATED) ---
+        // --- MODAL HANDLING ---
         function showModal(itemData) {
             modalTitle.textContent = itemData.Activity || 'Solution Details';
             modalContent.innerHTML = ''; 
 
-            // Remove existing report button if any
+            // Remove existing report button if any to prevent duplicates
             const existingReportButton = document.getElementById('detailed-report-button');
             if (existingReportButton) {
                 existingReportButton.remove();
@@ -341,9 +340,9 @@
                 reportButton.className = 'bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50';
                 reportButton.textContent = 'Detailed Report';
                 reportButton.addEventListener('click', () => {
-                    window.open('./desalination.html', '_blank'); // Opens in a new tab
+                    window.open('./desalination.html', '_blank'); 
                 });
-                // Insert the report button before the close button
+                // Insert the report button before the close button in the modal header
                 modalHeader.insertBefore(reportButton, modalCloseButton);
             }
 
@@ -393,7 +392,7 @@
             if (hasClimateHazards) {
                 climateHazardsDiv.appendChild(climateHazardsList);
                 modalContent.appendChild(climateHazardsDiv);
-            } else { // Optionally show a message if no hazards are listed
+            } else { 
                 const noHazardsMsg = document.createElement('p');
                 noHazardsMsg.className = 'text-sm text-gray-500 pl-2 pb-3';
                 noHazardsMsg.textContent = 'None specified.';
@@ -424,7 +423,7 @@
              if (hasFinanceSources) {
                 financeSourcesDiv.appendChild(financeSourcesList);
                 modalContent.appendChild(financeSourcesDiv);
-            } else { // Optionally show a message if no sources are listed
+            } else { 
                 const noSourcesMsg = document.createElement('p');
                 noSourcesMsg.className = 'text-sm text-gray-500 pl-2 pb-3';
                 noSourcesMsg.textContent = 'None specified.';
@@ -442,6 +441,11 @@
         function hideModal() {
             detailsModal.classList.add('hidden');
             detailsModal.classList.remove('flex');
+            // Remove report button when modal is hidden to clean up
+            const existingReportButton = document.getElementById('detailed-report-button');
+            if (existingReportButton) {
+                existingReportButton.remove();
+            }
             if (lastFocusedElement) lastFocusedElement.focus();
         }
         
