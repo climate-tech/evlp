@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desalination Technology Investment Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #F3F4F6;
+            border-right: 1px solid #CCCCCC;
+            padding: 2rem 1rem;
+        }
+
+        .sidebar h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #000000;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem 0;
+            text-decoration: none;
+            color: #666666;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .nav-item:hover {
+            background-color: #DBEAFE;
+            color: #3B82F6;
+        }
+
+        .nav-item.active {
+            background-color: #3B82F6;
+            color: #ffffff;
+        }
+
+        /* Main content */
+        .main-content {
+            margin-left: 280px;
+            padding: 3rem;
+            width: calc(100% - 280px);
+            max-width: 1000px;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #000000;
+            border-bottom: 2px solid #3B82F6;
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            color: #000000;
+            scroll-margin-top: 2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #000000;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #000000;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #000000;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        ul ul, ol ol {
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background-color: #ffffff;
+            border: 1px solid #CCCCCC;
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #CCCCCC;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #F3F4F6;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        tr:nth-child(even) {
+            background-color: #F3F4F6;
+        }
+
+        .section {
+            scroll-margin-top: 2rem;
+        }
+
+        .highlight {
+            background-color: #DBEAFE;
+            border-left: 4px solid #3B82F6;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        /* Horizontal nav bar for mobile */
+        .mobile-nav {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                display: block;
+                padding-top: 60px;
+            }
+
+            .hamburger {
+                display: none;
+            }
+
+            .overlay {
+                display: none;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .mobile-nav {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 60px;
+                background-color: #F3F4F6;
+                border-bottom: 1px solid #CCCCCC;
+                z-index: 100;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .mobile-nav-inner {
+                display: flex;
+                align-items: center;
+                height: 100%;
+                min-width: max-content;
+                padding: 0 1rem;
+            }
+
+            .mobile-nav-item {
+                display: inline-block;
+                padding: 0.5rem 1rem;
+                margin: 0 0.5rem;
+                text-decoration: none;
+                color: #666666;
+                border-radius: 0.375rem;
+                transition: all 0.2s;
+                font-size: 0.875rem;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .mobile-nav-item:hover {
+                background-color: #DBEAFE;
+                color: #3B82F6;
+            }
+
+            .mobile-nav-item.active {
+                background-color: #3B82F6;
+                color: #ffffff;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-nav">
+        <div class="mobile-nav-inner">
+            <a href="#executive-summary" class="mobile-nav-item">Executive Summary</a>
+            <a href="#technology-overview" class="mobile-nav-item">Technology</a>
+            <a href="#climate-adaptation" class="mobile-nav-item">Climate Adaptation</a>
+            <a href="#energy-environmental" class="mobile-nav-item">Energy & Environmental</a>
+            <a href="#market-analysis" class="mobile-nav-item">Market Analysis</a>
+            <a href="#innovation-landscape" class="mobile-nav-item">Innovation</a>
+            <a href="#technological-challenges" class="mobile-nav-item">Challenges</a>
+            <a href="#geographic-suitability" class="mobile-nav-item">Geographic</a>
+            <a href="#competitive-landscape" class="mobile-nav-item">Competitive</a>
+            <a href="#financial-considerations" class="mobile-nav-item">Financial</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <nav class="sidebar">
+            <h2>Table of Contents</h2>
+            <a href="#executive-summary" class="nav-item">1. Executive Summary & Investment Thesis</a>
+            <a href="#technology-overview" class="nav-item">2. Technology Overview</a>
+            <a href="#climate-adaptation" class="nav-item">3. Climate Adaptation & Resilience</a>
+            <a href="#energy-environmental" class="nav-item">4. Energy Sources & Environmental</a>
+            <a href="#market-analysis" class="nav-item">5. Market Analysis & Growth Drivers</a>
+            <a href="#innovation-landscape" class="nav-item">6. Innovation Landscape</a>
+            <a href="#technological-challenges" class="nav-item">7. Key Technological Challenges</a>
+            <a href="#geographic-suitability" class="nav-item">8. Geographic & Project Suitability</a>
+            <a href="#competitive-landscape" class="nav-item">9. Competitive Landscape</a>
+            <a href="#financial-considerations" class="nav-item">10. Financial & Investment</a>
+        </nav>
+
+        <main class="main-content">
+            <h1>Desalination Technology: An Investment Analysis for Climate Adaptation & Resilience</h1>
+
+            <section id="executive-summary" class="section">
+                <h2>1. Executive Summary & Investment Thesis Highlights</h2>
+                
+                <h3>Synthesis of Findings</h3>
+                <p>The global desalination market presents a compelling investment opportunity within the climate adaptation and resilience (A&R) theme. Driven by escalating water scarcity due to climate change, population growth, and industrial demand, the need for climate-independent water sources is becoming critical worldwide. Technological advancements, particularly in Reverse Osmosis (RO), have significantly improved energy efficiency and reduced costs, making desalination increasingly competitive against conventional water sources and alternatives like large-scale water transfers.</p>
+
+                <div class="highlight">
+                    <h4>Key Investment Drivers</h4>
+                    <ul>
+                        <li>Climate change exacerbating global water scarcity</li>
+                        <li>Technological progress reducing energy consumption by 50% in recent decades</li>
+                        <li>Growing regulatory pressure for sustainable solutions</li>
+                        <li>Transition from niche solution to core water management strategy</li>
+                    </ul>
+                </div>
+
+                <h3>Core Investment Thesis</h3>
+                <p>The fundamental driver for investment in desalination stems from its role as critical infrastructure for climate adaptation. Climate change is demonstrably increasing the frequency and severity of droughts, reducing conventional freshwater availability, and causing saltwater intrusion in coastal areas, thereby intensifying global water stress.</p>
+
+                <h3>Key Opportunities</h3>
+                <ul>
+                    <li><strong>Platform Investments:</strong> Acquiring or investing in established technology providers with proven track records (e.g., Veolia, Suez, IDE Technologies)</li>
+                    <li><strong>Growth Equity in Innovators:</strong> Supporting startups developing disruptive technologies</li>
+                    <li><strong>Project Finance & Development:</strong> Partnering to finance new projects in high-growth regions</li>
+                    <li><strong>Renewable Energy Integration:</strong> Investing in sustainable desalination solutions</li>
+                </ul>
+
+                <h3>Critical Risks</h3>
+                <ul>
+                    <li><strong>Financial & Execution Risk:</strong> High capital intensity and potential for cost overruns</li>
+                    <li><strong>Market & Offtake Risk:</strong> Dependence on long-term water purchase agreements</li>
+                    <li><strong>Regulatory Risk:</strong> Complex permitting processes and changing regulations</li>
+                    <li><strong>Environmental & Social Risk:</strong> Marine impacts and community acceptance challenges</li>
+                </ul>
+            </section>
+
+            <section id="technology-overview" class="section">
+                <h2>2. Technology Overview</h2>
+                
+                <h3>Explanation of Desalination</h3>
+                <p>Desalination refers to any process that removes salts and other dissolved minerals from saline water sources to produce freshwater suitable for human consumption, irrigation, or industrial use. The fundamental principle involves separating the incoming feedwater into two streams: a product stream with low salt concentration and a reject stream with high salt concentration.</p>
+
+                <h3>Core Technologies</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Technology</th>
+                            <th>Principle</th>
+                            <th>Efficiency</th>
+                            <th>Applications</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Reverse Osmosis (RO)</strong></td>
+                            <td>Pressure-driven membrane separation</td>
+                            <td>SEC: 2-5 kWh/m³</td>
+                            <td>Municipal & industrial desal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multi-Stage Flash (MSF)</strong></td>
+                            <td>Thermal distillation via flashing</td>
+                            <td>SEC: 10-27 kWh/m³</td>
+                            <td>Large scale seawater</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multi-Effect Distillation (MED)</strong></td>
+                            <td>Evaporation in stages</td>
+                            <td>SEC: 5.5-9 kWh/m³</td>
+                            <td>Medium-large scale</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Electrodialysis (ED/EDR)</strong></td>
+                            <td>Electrically driven ion transport</td>
+                            <td>Variable by salt content</td>
+                            <td>Brackish water</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Membrane Distillation (MD)</strong></td>
+                            <td>Thermal vapor transport</td>
+                            <td>GOR dependent</td>
+                            <td>High salinity, niche</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="climate-adaptation" class="section">
+                <h2>3. Climate Adaptation & Resilience (A&R) Relevance</h2>
+                
+                <h3>Climate Hazards Addressed</h3>
+                <ul>
+                    <li><strong>Increased Drought Frequency:</strong> Desalination provides a rainfall-independent water source</li>
+                    <li><strong>Reduced Freshwater Availability:</strong> Taps into non-climate-dependent seawater resources</li>
+                    <li><strong>Saltwater Intrusion:</strong> Mitigates contamination of coastal aquifers</li>
+                    <li><strong>Degraded Water Quality:</strong> Provides robust treatment against quality variations</li>
+                </ul>
+
+                <h3>Enhancing Community Adaptation</h3>
+                <p>By providing a reliable water source independent of climate variability, desalination enhances water security, economic stability, and public health while reducing conflict potential over scarce water resources.</p>
+            </section>
+
+            <section id="energy-environmental" class="section">
+                <h2>4. Energy Sources & Environmental Considerations</h2>
+                
+                <h3>Energy Intensity</h3>
+                <p>Energy consumption represents 25-60% of operating costs for desalination plants. The sector consumes approximately 75 TWh annually, resulting in 76 Mt CO₂/year when powered by fossil fuels.</p>
+
+                <h3>Renewable Energy Integration</h3>
+                <div class="highlight">
+                    <h4>Key Integration Strategies</h4>
+                    <ul>
+                        <li>Solar PV + RO: Most common pairing due to falling costs</li>
+                        <li>Wind + RO: Economically attractive in windy locations</li>
+                        <li>Solar Thermal + MED/MD: High-temperature heat applications</li>
+                        <li>Hybrid Systems: Multiple renewable sources for increased reliability</li>
+                    </ul>
+                </div>
+
+                <h3>Environmental Challenges</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Challenge</th>
+                            <th>Impact</th>
+                            <th>Mitigation Strategies</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Brine Discharge</strong></td>
+                            <td>Elevated salinity in marine environments</td>
+                            <td>Diffusers, co-discharge, ZLD systems, brine valorization</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Intake Impacts</strong></td>
+                            <td>Marine life impingement and entrainment</td>
+                            <td>Subsurface intakes, velocity caps, screening systems</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chemical Use</strong></td>
+                            <td>Antiscalants and cleaning agents in discharge</td>
+                            <td>Chemical optimization, eco-friendly alternatives</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="market-analysis" class="section">
+                <h2>5. Market Analysis & Growth Drivers</h2>
+                
+                <h3>Market Size & Growth</h3>
+                <p>The global desalination market is valued at USD 15-26 billion annually as of 2023-2024, with projections to reach USD 33-50 billion by the early 2030s. The market demonstrates strong growth at 7-10% CAGR.</p>
+
+                <h3>Key Drivers</h3>
+                <ul>
+                    <li>Climate change and increasing water scarcity</li>
+                    <li>Population growth and urbanization</li>
+                    <li>Industrial and agricultural demand</li>
+                    <li>Technological advancements reducing costs</li>
+                    <li>Government policies supporting water security</li>
+                    <li>Depletion of conventional water sources</li>
+                </ul>
+
+                <h3>Geographic Markets</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Region</th>
+                            <th>Market Share</th>
+                            <th>Primary Drivers</th>
+                            <th>Key Trends</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>MENA</strong></td>
+                            <td>~50%</td>
+                            <td>Extreme aridity, gov. investment</td>
+                            <td>Shift from thermal to RO</td>
+                        </tr>
+                        <tr>
+                            <td><strong>APAC</strong></td>
+                            <td>Fastest growing</td>
+                            <td>Population, urbanization</td>
+                            <td>Industrial reuse, PPPs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>North America</strong></td>
+                            <td>Significant</td>
+                            <td>Drought (Western US)</td>
+                            <td>Environmental regulations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Europe</strong></td>
+                            <td>Growing</td>
+                            <td>Mediterranean stress</td>
+                            <td>Efficiency focus</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="innovation-landscape" class="section">
+                <h2>6. Innovation Landscape & Technological Advancement</h2>
+                
+                <h3>Innovation Pathways</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Innovation Area</th>
+                            <th>Key Developments</th>
+                            <th>Potential Benefits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Next-Gen Membranes</strong></td>
+                            <td>Nanocomposites, aquaporin, graphene</td>
+                            <td>Higher flux, improved fouling resistance</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Energy Efficiency</strong></td>
+                            <td>Advanced ERDs, batch RO, low-temp thermal</td>
+                            <td>Reduced energy consumption</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Brine Valorization</strong></td>
+                            <td>Mineral extraction, ZLD systems</td>
+                            <td>Revenue generation, waste reduction</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AI/ML Optimization</strong></td>
+                            <td>Predictive maintenance, real-time control</td>
+                            <td>Reduced OpEx, improved reliability</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Technology Readiness Levels</h3>
+                <p>The industry spans the full innovation spectrum, from mature commercial technologies (RO, MSF) to emerging solutions in development (graphene membranes, adsorption desalination).</p>
+            </section>
+
+            <section id="technological-challenges" class="section">
+                <h2>7. Key Technological Challenges & Opportunities</h2>
+                
+                <h3>Critical Technical Hurdles</h3>
+                <ol>
+                    <li><strong>Energy Consumption:</strong> Approaching theoretical minimum (1 kWh/m³)</li>
+                    <li><strong>Cost Reduction:</strong> Lowering CapEx and OpEx through innovation</li>
+                    <li><strong>Brine Management:</strong> Sustainable, cost-effective disposal solutions</li>
+                    <li><strong>Membrane Durability:</strong> Extending lifespan, improving fouling resistance</li>
+                    <li><strong>Environmental Impacts:</strong> Minimizing intake/outfall effects</li>
+                    <li><strong>Infrastructure Integration:</strong> Scaling emerging technologies</li>
+                    <li><strong>Operational Complexity:</strong> Enhancing automation and reliability</li>
+                </ol>
+
+                <h3>Investment Opportunities</h3>
+                <ul>
+                    <li>Energy efficiency breakthroughs in membranes and ERDs</li>
+                    <li>Cost reduction solutions including modular designs</li>
+                    <li>Brine management innovations and valorization</li>
+                    <li>Advanced membrane technologies with better fouling resistance</li>
+                    <li>Environmental mitigation technologies for intake systems</li>
+                    <li>AI/ML solutions for process optimization</li>
+                    <li>Niche application technologies for specialized markets</li>
+                </ul>
+            </section>
+
+            <section id="geographic-suitability" class="section">
+                <h2>8. Geographic & Project Suitability Criteria</h2>
+                
+                <h3>Favorable Conditions</h3>
+                <div class="highlight">
+                    <h4>Essential Criteria</h4>
+                    <ul>
+                        <li>High water stress or scarcity</li>
+                        <li>Coastal access (for seawater) or brackish resources</li>
+                        <li>Reliable and affordable energy infrastructure</li>
+                        <li>Supportive regulatory frameworks</li>
+                        <li>Political stability and strong governance</li>
+                        <li>Economic capacity and access to finance</li>
+                        <li>Suitable site conditions and land availability</li>
+                        <li>Social acceptance and stakeholder support</li>
+                    </ul>
+                </div>
+
+                <h3>Examples of Suitable vs Less Suitable Regions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Examples</th>
+                            <th>Key Factors</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Highly Suitable</strong></td>
+                            <td>GCC countries, Israel, Coastal Australia, Singapore</td>
+                            <td>Extreme aridity, economic capacity, political stability</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Moderately Suitable</strong></td>
+                            <td>California, Mediterranean Europe, Chile</td>
+                            <td>Growing scarcity, regulatory challenges</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Less Suitable</strong></td>
+                            <td>Landlocked regions, water-abundant areas</td>
+                            <td>Brine disposal issues, lack of economic drivers</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="competitive-landscape" class="section">
+                <h2>9. Competitive Landscape</h2>
+                
+                <h3>Established Players</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Capabilities</th>
+                            <th>Geographic Focus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Veolia</strong></td>
+                            <td>Full value chain, digital solutions</td>
+                            <td>Global leader, 18% world capacity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Suez</strong></td>
+                            <td>RO/thermal tech, O&M</td>
+                            <td>Worldwide operations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IDE Technologies</strong></td>
+                            <td>Pure-play desal specialist</td>
+                            <td>Israel, global projects</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Acciona Agua</strong></td>
+                            <td>EPC, O&M, RO focus</td>
+                            <td>MENA, Spain, Australia</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Doosan Enerbility</strong></td>
+                            <td>Thermal/RO, EPC</td>
+                            <td>Middle East strong</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Startup Ecosystem</h3>
+                <ul>
+                    <li><strong>Advanced Membranes:</strong> NanoH2O (acquired), Aquaporin, NematiQ</li>
+                    <li><strong>Novel Processes:</strong> Desalitech (acquired), Voltea, Gradiant</li>
+                    <li><strong>Brine Management:</strong> EnergyX, Lilac Solutions, Adionics</li>
+                    <li><strong>AI/Digital:</strong> TaKaDu, Fracta, Ketos</li>
+                    <li><strong>Renewable Integration:</strong> Resolute Marine Energy</li>
+                </ul>
+
+                <h3>Competitive Dynamics</h3>
+                <p>The market is highly competitive, especially for large-scale municipal projects. Key competitive advantages include technology innovation, cost leadership, execution capability, O&M expertise, and sustainability profile.</p>
+            </section>
+
+            <section id="financial-considerations" class="section">
+                <h2>10. Financial & Investment Considerations</h2>
+                
+                <h3>Capital Intensity (CapEx)</h3>
+                <p>Desalination projects require substantial upfront investment, typically ranging from USD 800-1,500 per m³/day of capacity for large-scale SWRO plants.</p>
+
+                <h4>Example Project Costs</h4>
+                <ul>
+                    <li>100,000 m³/day plant: USD 80-150 million</li>
+                    <li>Sorek plant (411,000 m³/day): ~USD 400 million</li>
+                    <li>Carlsbad plant (189,000 m³/day): USD 734 million</li>
+                    <li>Perth plant (140,000 m³/day): AUD 387 million</li>
+                </ul>
+
+                <h3>Operating Expenses (OpEx)</h3>
+                <div class="highlight">
+                    <h4>OpEx Breakdown</h4>
+                    <ul>
+                        <li><strong>Energy:</strong> 25-60% of total costs</li>
+                        <li><strong>Membrane replacement:</strong> Every 5-10 years</li>
+                        <li><strong>Chemicals:</strong> Antiscalants, cleaning agents</li>
+                        <li><strong>Labor & maintenance:</strong> Skilled workforce required</li>
+                    </ul>
+                </div>
+
+                <h3>Financial Models</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Description</th>
+                            <th>Characteristics</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>PPP/BOT</strong></td>
+                            <td>Public-Private Partnership</td>
+                            <td>Long-term revenue guarantees, risk sharing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>BOO</strong></td>
+                            <td>Build-Own-Operate</td>
+                            <td>Private ownership, WPA contracts</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Utility Investment</strong></td>
+                            <td>Public/private utility owned</td>
+                            <td>Integrated water management</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Investment Return Considerations</h3>
+                <ul>
+                    <li>Long-term, stable cash flows (20-30 year contracts)</li>
+                    <li>Energy cost sensitivity and hedging strategies</li>
+                    <li>Regulatory and political stability crucial</li>
+                    <li>Environmental compliance and social license</li>
+                    <li>Technology obsolescence risk for long-lived assets</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Smooth scroll functionality for both desktop and mobile
+        function setupNavigation() {
+            const navItems = document.querySelectorAll('.nav-item, .mobile-nav-item');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    // Remove active class from all nav items
+                    navItems.forEach(navItem => {
+                        navItem.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Smooth scroll to target
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        }
+
+        // Add active class to current section based on scroll position
+        function updateActiveSection() {
+            const sections = document.querySelectorAll('.section');
+            const navItems = document.querySelectorAll('.nav-item, .mobile-nav-item');
+            
+            let current = '';
+            const offset = window.innerWidth <= 768 ? 80 : 100; // Account for fixed mobile nav
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                
+                if (window.pageYOffset >= sectionTop - offset) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === '#' + current) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize navigation
+        setupNavigation();
+        window.addEventListener('scroll', updateActiveSection);
+        
+        // Update on resize
+        window.addEventListener('resize', updateActiveSection);
+    </script>
+</body>
+</html>
