@@ -74,6 +74,12 @@
             font-weight: bold;
             margin-right: 0.25rem;
         }
+        /* Detailed report button style */
+        #detailed-report-button {
+            margin-left: auto; /* Pushes the button to the right of the title */
+            padding: 0.3rem 0.75rem; /* Adjusted padding */
+            font-size: 0.8rem; /* Smaller font size */
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -130,9 +136,10 @@
 
     <div id="details-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4 z-50 transition-opacity duration-300 ease-in-out">
         <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl max-w-xl md:max-w-2xl lg:max-w-3xl w-full max-h-[90vh] flex flex-col">
-            <div class="flex justify-between items-center mb-4">
+            <div id="modal-header" class="flex justify-between items-center mb-4"> {/* Added ID for easier targeting */}
                 <h2 id="modal-title" class="text-2xl font-semibold text-gray-800">Solution Details</h2>
-                <button id="modal-close-button" class="text-gray-500 hover:text-gray-800 transition-colors text-2xl font-bold">&times;</button>
+                {/* Detailed Report Button will be inserted here by JS if applicable */}
+                <button id="modal-close-button" class="text-gray-500 hover:text-gray-800 transition-colors text-2xl font-bold ml-4">&times;</button> {/* Added ml-4 for spacing */}
             </div>
             <div id="modal-content" class="overflow-y-auto pr-2">
                 </div>
@@ -161,6 +168,7 @@
         const textFilter = document.getElementById('text-filter');
         const subsectorGroupsContainer = document.getElementById('subsector-groups-container');
         const detailsModal = document.getElementById('details-modal');
+        const modalHeader = document.getElementById('modal-header'); // Get modal header
         const modalContent = document.getElementById('modal-content');
         const modalCloseButton = document.getElementById('modal-close-button');
         const modalTitle = document.getElementById('modal-title');
@@ -318,13 +326,32 @@
         // --- MODAL HANDLING (UPDATED) ---
         function showModal(itemData) {
             modalTitle.textContent = itemData.Activity || 'Solution Details';
-            modalContent.innerHTML = ''; // Clear previous content
+            modalContent.innerHTML = ''; 
 
-            // Section 1: General Details (excluding specific hazard/finance columns)
+            // Remove existing report button if any
+            const existingReportButton = document.getElementById('detailed-report-button');
+            if (existingReportButton) {
+                existingReportButton.remove();
+            }
+
+            // Add "Detailed Report" button if the activity is "Desalination"
+            if (itemData.Activity && itemData.Activity.trim() === "Desalination") {
+                const reportButton = document.createElement('button');
+                reportButton.id = 'detailed-report-button';
+                reportButton.className = 'bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50';
+                reportButton.textContent = 'Detailed Report';
+                reportButton.addEventListener('click', () => {
+                    window.open('./desalination.html', '_blank'); // Opens in a new tab
+                });
+                // Insert the report button before the close button
+                modalHeader.insertBefore(reportButton, modalCloseButton);
+            }
+
+
+            // Section 1: General Details
             const generalDetailsDl = document.createElement('dl');
             generalDetailsDl.className = 'divide-y divide-gray-200';
             HEADERS.forEach(header => {
-                // Skip headers that will be handled in dedicated sections
                 if (CLIMATE_HAZARDS_COLUMNS.includes(header) || DEMAND_FINANCE_COLUMNS.includes(header)) {
                     return;
                 }
@@ -333,16 +360,14 @@
                     const dt = document.createElement('dt');
                     dt.className = 'text-sm font-semibold text-gray-700 py-3';
                     dt.textContent = header;
-
                     const dd = document.createElement('dd');
                     dd.className = 'text-sm text-gray-600 pb-3 pl-2';
                     dd.textContent = value; 
-                    
                     generalDetailsDl.appendChild(dt);
                     generalDetailsDl.appendChild(dd);
                 }
             });
-            if (generalDetailsDl.hasChildNodes()) { // Only add if there are general details
+            if (generalDetailsDl.hasChildNodes()) {
                  modalContent.appendChild(generalDetailsDl);
             }
 
@@ -368,6 +393,12 @@
             if (hasClimateHazards) {
                 climateHazardsDiv.appendChild(climateHazardsList);
                 modalContent.appendChild(climateHazardsDiv);
+            } else { // Optionally show a message if no hazards are listed
+                const noHazardsMsg = document.createElement('p');
+                noHazardsMsg.className = 'text-sm text-gray-500 pl-2 pb-3';
+                noHazardsMsg.textContent = 'None specified.';
+                climateHazardsDiv.appendChild(noHazardsMsg);
+                modalContent.appendChild(climateHazardsDiv);
             }
 
 
@@ -392,6 +423,12 @@
             });
              if (hasFinanceSources) {
                 financeSourcesDiv.appendChild(financeSourcesList);
+                modalContent.appendChild(financeSourcesDiv);
+            } else { // Optionally show a message if no sources are listed
+                const noSourcesMsg = document.createElement('p');
+                noSourcesMsg.className = 'text-sm text-gray-500 pl-2 pb-3';
+                noSourcesMsg.textContent = 'None specified.';
+                financeSourcesDiv.appendChild(noSourcesMsg);
                 modalContent.appendChild(financeSourcesDiv);
             }
 
