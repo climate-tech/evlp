@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Adaptation & Resilience Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        /* Custom scrollbar for modal (optional, for better aesthetics) */
+        #modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        #modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        #modal-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        #modal-content::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Basic body font */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter as a common sans-serif font */
+        }
+        /* Ensure Inter font is loaded */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* Improved focus states for accessibility and shadcn-like feel */
+        select:focus, input[type="text"]:focus, button:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px #2563eb; /* Tailwind's blue-600 */
+        }
+        .filter-element {
+            min-width: 150px; /* Ensure filters don't get too squished */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-700">Urban Adaptation & Resilience Solutions</h1>
+            <p class="text-gray-600 mt-2">Browse and filter A&R activities based on various criteria.</p>
+        </header>
+
+        <div id="filters" class="mb-8 p-4 sm:p-6 bg-white rounded-xl shadow-lg">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label for="subsector-filter" class="block text-sm font-medium text-gray-700 mb-1">Subsector</label>
+                    <select id="subsector-filter" class="filter-element w-full p-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                        <option value="">All Subsectors</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="hazard-filter" class="block text-sm font-medium text-gray-700 mb-1">Climate Hazard</label>
+                    <select id="hazard-filter" class="filter-element w-full p-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                        <option value="">All Hazards</option>
+                    </select>
+                </div>
+                <div class="sm:col-span-2 lg:col-span-1">
+                    <label for="text-filter" class="block text-sm font-medium text-gray-700 mb-1">Search Text</label>
+                    <input type="text" id="text-filter" placeholder="Search any field..." class="filter-element w-full p-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                </div>
+                <div>
+                    <button id="reset-filters-button" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading-indicator" class="text-center py-10">
+            <p class="text-xl text-gray-600">Loading data...</p>
+        </div>
+        
+        <div id="no-results-indicator" class="text-center py-10 hidden">
+            <p class="text-xl text-gray-600">No solutions match the current filters.</p>
+        </div>
+
+        <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            </div>
+    </div>
+
+    <div id="details-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center p-4 z-50 transition-opacity duration-300 ease-in-out">
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl max-w-xl md:max-w-2xl lg:max-w-3xl w-full max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="modal-title" class="text-2xl font-semibold text-gray-800">Solution Details</h2>
+                <button id="modal-close-button" class="text-gray-500 hover:text-gray-800 transition-colors text-2xl font-bold">&times;</button>
+            </div>
+            <div id="modal-content" class="overflow-y-auto pr-2">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables to store data and headers
+        let GLOBAL_DATA = [];
+        let HEADERS = [];
+        // Updated CSV_FILE_PATH to be explicitly relative
+        const CSV_FILE_PATH = './Adaptation_Taxonomy.csv'; // Path to your CSV file
+
+        // Climate hazard column names from the CSV
+        const CLIMATE_HAZARDS_COLUMNS = [
+            "Heat Stress", "Cold Stress", "Water Stress", "Storm Conditions",
+            "Flooding", "Mass Movement", "Wildfire Conditions", "Marine Conditions"
+        ];
+
+        // DOM Elements
+        const subsectorFilter = document.getElementById('subsector-filter');
+        const hazardFilter = document.getElementById('hazard-filter');
+        const textFilter = document.getElementById('text-filter');
+        const cardsContainer = document.getElementById('cards-container');
+        const detailsModal = document.getElementById('details-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalCloseButton = document.getElementById('modal-close-button');
+        const modalTitle = document.getElementById('modal-title');
+        const resetFiltersButton = document.getElementById('reset-filters-button');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const noResultsIndicator = document.getElementById('no-results-indicator');
+
+        // --- DATA LOADING AND INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAndProcessData(); // This is now an async function call
+            setupEventListeners();
+        });
+
+        // Changed to async function to use await for fetch
+        async function loadAndProcessData() {
+            loadingIndicator.classList.remove('hidden');
+            cardsContainer.innerHTML = ''; // Clear any existing cards
+            noResultsIndicator.classList.add('hidden');
+
+            try {
+                // Fetch the CSV file content
+                const response = await fetch(CSV_FILE_PATH);
+                if (!response.ok) {
+                    // If the HTTP response status is not OK, throw an error
+                    throw new Error(`HTTP error! status: ${response.status} while fetching ${CSV_FILE_PATH}`);
+                }
+                const csvText = await response.text(); // Get the CSV content as a string
+
+                // Parse the CSV string
+                Papa.parse(csvText, {
+                    header: true, // Treat the first row as headers
+                    skipEmptyLines: true, // Ignore empty lines
+                    complete: function(results) {
+                        if (results.errors.length > 0) {
+                            console.error("CSV Parsing Errors:", results.errors);
+                            loadingIndicator.textContent = "Error parsing CSV data. Please check the console.";
+                            return;
+                        }
+                        GLOBAL_DATA = results.data;
+                        HEADERS = results.meta.fields;
+                        
+                        populateFilters();
+                        renderCards(GLOBAL_DATA);
+                        loadingIndicator.classList.add('hidden');
+                    },
+                    error: function(papaparseError) {
+                        // This error callback is for errors during parsing itself, after successful fetch
+                        console.error("PapaParse Error:", papaparseError);
+                        loadingIndicator.textContent = "Failed to parse CSV data.";
+                        loadingIndicator.classList.remove('hidden');
+                    }
+                });
+            } catch (fetchError) {
+                // Catch errors from the fetch operation (e.g., network error, file not found)
+                console.error("Error fetching CSV:", fetchError);
+                loadingIndicator.textContent = `Failed to load adaptation solutions data: ${fetchError.message}. Ensure '${CSV_FILE_PATH}' is accessible in the same directory as the HTML file.`;
+                loadingIndicator.classList.remove('hidden'); 
+                cardsContainer.innerHTML = ''; 
+                noResultsIndicator.classList.add('hidden');
+            }
+        }
+
+        // --- FILTER POPULATION ---
+        function populateFilters() {
+            // Populate Subsector Filter
+            // Create a unique, sorted list of subsectors from the data
+            const subsectors = [...new Set(GLOBAL_DATA.map(item => item.Subsectors).filter(Boolean))].sort();
+            subsectorFilter.innerHTML = '<option value="">All Subsectors</option>'; // Reset options
+            subsectors.forEach(subsector => {
+                const option = document.createElement('option');
+                option.value = subsector;
+                option.textContent = subsector;
+                subsectorFilter.appendChild(option);
+            });
+
+            // Populate Climate Hazard Filter
+            hazardFilter.innerHTML = '<option value="">All Hazards</option>'; // Reset options
+            CLIMATE_HAZARDS_COLUMNS.forEach(hazard => {
+                const option = document.createElement('option');
+                option.value = hazard;
+                option.textContent = hazard;
+                hazardFilter.appendChild(option);
+            });
+        }
+
+        // --- CARD RENDERING ---
+        function renderCards(dataToRender) {
+            cardsContainer.innerHTML = ''; // Clear existing cards
+            noResultsIndicator.classList.add('hidden'); // Hide no results message initially
+
+            if (dataToRender.length === 0) {
+                noResultsIndicator.classList.remove('hidden'); // Show if no data matches
+                return;
+            }
+
+            dataToRender.forEach(item => {
+                const card = document.createElement('div');
+                // Styling for each card
+                card.className = 'bg-white rounded-xl shadow-lg p-5 hover:shadow-xl transition-shadow duration-300 ease-in-out cursor-pointer flex flex-col justify-between';
+                
+                // Truncate long text for card display to keep UI clean
+                const activityText = item.Activity && item.Activity.length > 100 ? item.Activity.substring(0, 97) + '...' : item.Activity;
+                const subsectorsText = item.Subsectors && item.Subsectors.length > 70 ? item.Subsectors.substring(0, 67) + '...' : item.Subsectors;
+
+                card.innerHTML = `
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-600 mb-2">${activityText || 'N/A'}</h3>
+                        <p class="text-sm text-gray-600"><strong class="font-medium">Subsector:</strong> ${subsectorsText || 'N/A'}</p>
+                    </div>
+                    <button class="mt-4 text-sm text-blue-500 hover:text-blue-700 font-medium self-start">View Details &rarr;</button>
+                `;
+                // Add event listener to show modal with item details on card click
+                card.addEventListener('click', () => showModal(item));
+                cardsContainer.appendChild(card);
+            });
+        }
+
+        // --- MODAL HANDLING ---
+        function showModal(itemData) {
+            modalTitle.textContent = itemData.Activity || 'Solution Details'; // Set modal title
+            modalContent.innerHTML = ''; // Clear previous modal content
+
+            const dl = document.createElement('dl'); // Definition list for details
+            dl.className = 'divide-y divide-gray-200'; // Styling for the list
+
+            HEADERS.forEach(header => {
+                // Display each piece of information if it has a value
+                const value = itemData[header] !== undefined && itemData[header] !== null ? String(itemData[header]).trim() : '';
+                if (value) { // Only add if there's a non-empty value
+                    const dt = document.createElement('dt'); // Term (header name)
+                    dt.className = 'text-sm font-semibold text-gray-700 py-3';
+                    dt.textContent = header;
+
+                    const dd = document.createElement('dd'); // Definition (value)
+                    dd.className = 'text-sm text-gray-600 pb-3 pl-2';
+                    dd.textContent = value; // Using textContent for security (prevents XSS)
+                    
+                    dl.appendChild(dt);
+                    dl.appendChild(dd);
+                }
+            });
+            modalContent.appendChild(dl);
+            detailsModal.classList.remove('hidden'); // Show the modal
+            detailsModal.classList.add('flex'); // Use flex for centering
+            trapFocus(detailsModal); // Trap focus within the modal for accessibility
+        }
+
+        function hideModal() {
+            detailsModal.classList.add('hidden'); // Hide the modal
+            detailsModal.classList.remove('flex');
+            if (lastFocusedElement) {
+                lastFocusedElement.focus(); // Return focus to the element that opened the modal
+            }
+        }
+        
+        let lastFocusedElement; // To store the element that was focused before modal opened
+
+        function trapFocus(element) {
+            // Find all focusable elements within the modal
+            const focusableEls = element.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])');
+            const firstFocusableEl = focusableEls.length > 0 ? focusableEls[0] : null;
+            const lastFocusableEl = focusableEls.length > 0 ? focusableEls[focusableEls.length - 1] : null;
+            
+            lastFocusedElement = document.activeElement; // Store currently focused element
+
+            element.addEventListener('keydown', function(e) {
+                const isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+                if (!isTabPressed || !firstFocusableEl) return; // If no tab or no focusable elements, do nothing
+
+                if (e.shiftKey) { // Shift + Tab: Navigate backwards
+                    if (document.activeElement === firstFocusableEl) {
+                        if (lastFocusableEl) lastFocusableEl.focus(); // Loop to the last element
+                        e.preventDefault();
+                    }
+                } else { // Tab: Navigate forwards
+                    if (document.activeElement === lastFocusableEl) {
+                        if (firstFocusableEl) firstFocusableEl.focus(); // Loop to the first element
+                        e.preventDefault();
+                    }
+                }
+            });
+            if(firstFocusableEl) firstFocusableEl.focus(); // Focus the first element in the modal
+        }
+
+
+        // --- FILTERING LOGIC ---
+        function applyFilters() {
+            const selectedSubsector = subsectorFilter.value;
+            const selectedHazard = hazardFilter.value;
+            const searchText = textFilter.value.toLowerCase().trim();
+
+            let filteredData = GLOBAL_DATA;
+
+            // Filter by Subsector
+            if (selectedSubsector) {
+                filteredData = filteredData.filter(item => item.Subsectors === selectedSubsector);
+            }
+
+            // Filter by Climate Hazard (checks if the hazard column has 'X')
+            if (selectedHazard) {
+                filteredData = filteredData.filter(item => item[selectedHazard] && item[selectedHazard].toUpperCase() === 'X');
+            }
+
+            // Filter by Text Search (searches all string values in the item)
+            if (searchText) {
+                filteredData = filteredData.filter(item => {
+                    return Object.values(item).some(value =>
+                        String(value).toLowerCase().includes(searchText)
+                    );
+                });
+            }
+            renderCards(filteredData); // Re-render cards with filtered data
+        }
+        
+        // --- EVENT LISTENERS ---
+        function setupEventListeners() {
+            // Apply filters when dropdowns or text input changes
+            subsectorFilter.addEventListener('change', applyFilters);
+            hazardFilter.addEventListener('change', applyFilters);
+            textFilter.addEventListener('input', applyFilters); // 'input' for real-time filtering as user types
+            
+            // Modal close button
+            modalCloseButton.addEventListener('click', hideModal);
+            // Close modal on Escape key press
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && !detailsModal.classList.contains('hidden')) {
+                    hideModal();
+                }
+            });
+            // Close modal on clicking the background overlay
+            detailsModal.addEventListener('click', (event) => {
+                if (event.target === detailsModal) { // Check if the click is on the overlay itself
+                    hideModal();
+                }
+            });
+
+            // Reset all filters
+            resetFiltersButton.addEventListener('click', () => {
+                subsectorFilter.value = '';
+                hazardFilter.value = '';
+                textFilter.value = '';
+                applyFilters(); // Re-apply filters which will show all data
+            });
+        }
+
+    </script>
+</body>
+</html>
