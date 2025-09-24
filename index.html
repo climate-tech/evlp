@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Landing Page</title>
+  <title>Easley Ventures</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" sizes="32x32" href="easley-ventures-logo.png">
   <style>
@@ -82,16 +82,24 @@
       padding: 0; 
     }
 
-    .logo-link {
+    .site-header {
       position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1000; 
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      z-index: 999;
+      padding: 12px 20px;
+    }
+
+    .logo-link {
+      z-index: 1000;
     }
     
     .logo {
-      max-width: 60px; 
+      max-width: 240px; 
       height: auto;
+      display: block;
     }
 
     .hero {
@@ -108,7 +116,7 @@
     }
 
     .hero-top-text img {
-      max-width: 80px;
+      max-width: 320px;
       height: auto;
       margin-bottom: 0.5rem;  
     }
@@ -291,19 +299,22 @@
 </head>
 <body>
 
-  <a href="https://easleyventures.com" class="logo-link">
-    <img src="easley-ventures-logo.png" alt="Easley Ventures logo" class="logo">
-  </a>
+  <header class="site-header">
+    <a href="https://easleyventures.com" class="logo-link">
+      <img src="easley-ventures-logo.png" alt="Easley Ventures logo" class="logo">
+    </a>
+  </header>
 
 
   <section class="hero container">
     <div class="hero-top-text fade-in">
 
-      <h1>Easley Ventures</h1>
+      <h1>Green is the new white(space).</h1>
     </div>
 
     <p class="hero-welcome fade-in">
-      Investing in climate tech innovation for triple top line outcomes: People, Profit and Planet. [more soon--follow on <a href="https://www.linkedin.com/company/easley-ventures/" class="link-underline"> LinkedIn</a> for updates]
+      We help companies, startups and capital providers scale climate solutions through partnerships, sustainability innovation, and venture building. Mitigation, adaptation and resilience, powered by AI.
+      <br><br>Follow on <a href="https://www.linkedin.com/company/easley-ventures/" class="link-underline"> LinkedIn</a> for updates.
     </p>
 
     <img src="ev-li-image-noise.png" alt="image" class="fade-in hero-gif" />
