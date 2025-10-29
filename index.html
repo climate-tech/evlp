@@ -94,12 +94,22 @@
 
     .logo-link {
       z-index: 1000;
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
     }
-    
+
     .logo {
       height: 50px;
       width: auto;
       display: block;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #000;
     }
 
     .hero {
@@ -302,6 +312,7 @@
   <header class="site-header">
     <a href="https://easleyventures.com" class="logo-link">
       <img src="easley-ventures-logo.png" alt="Easley Ventures logo" class="logo">
+      <div class="logo-text">Easley<br>Ventures</div>
     </a>
   </header>
 
